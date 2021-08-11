@@ -10,4 +10,4 @@ def load_config(path: str) -> dict:
 def sql_connect() -> pymysql.Connection:
   config = load_config('config.json')
 
-  return pymysql.connect(host=config['sql']['host'], user=config['sql']['user'], password=config['sql']['password'], db='Invester', charset='utf8')
+  return pymysql.connect(host=config['sql']['host'], user=config['sql']['user'], password=config['sql']['password'], db=config['sql']['db'], charset='utf8')
