@@ -1,6 +1,10 @@
 from market_env.utils import sql_connect
 
+from collections import namedtuple
 import pandas as pd
+
+
+Company = namedtuple('Company', ['code', 'name'])
 
 class Market:
   def __init__(self):
@@ -24,17 +28,13 @@ class Market:
       self.codes[code] = name
 
 
-  def get_company_code(self, code):
+  def get_company(self, code_or_name):
     code_keys = list(self.codes.keys())
     code_names = list(self.codes.values())
 
-    if code in code_keys:
-      return code
-    if code in code_names:
-      return code_keys[code_names.index(code)]
+    if code_or_name in code_keys:
+      return Company(code_or_name, self.codes[code_or_name])
+    if code_or_name in code_names:
+      return Company(code_keys[code_names.index(code_or_name)], code_or_name)
 
-    raise ValueError(f"invalid code '{code}'")
-
-  def get_company_name(self, code):
-    code = self.get_company_code(code)
-    return self.codes[code]
+    raise ValueError(f"invalid company '{code_or_name}'")
