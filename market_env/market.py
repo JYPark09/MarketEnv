@@ -27,7 +27,6 @@ class Market:
     for code, name in zip(codes, names):
       self.codes[code] = name
 
-
   def get_company(self, code_or_name):
     code_keys = list(self.codes.keys())
     code_names = list(self.codes.values())
@@ -38,3 +37,6 @@ class Market:
       return Company(code_keys[code_names.index(code_or_name)], code_or_name)
 
     raise ValueError(f"invalid company '{code_or_name}'")
+
+  def get_company_list(self):
+    return [Company(code, self.codes[code]) for code in self.codes]
