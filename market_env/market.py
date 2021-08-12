@@ -49,6 +49,7 @@ class Market:
   def get_company_list(self):
     return [Company(code, self.codes[code]) for code in self.codes]
 
+  @staticmethod
   def _convert_date(date: Union[datetime, str]):
     if isinstance(date, datetime):
       return date.strftime('%Y-%m-%d')
