@@ -1,7 +1,8 @@
 from market_env.utils import sql_connect
 
-from collections import namedtuple
+from datetime import datetime
 import pandas as pd
+from typing import Union
 
 
 class Company:
@@ -47,3 +48,11 @@ class Market:
 
   def get_company_list(self):
     return [Company(code, self.codes[code]) for code in self.codes]
+
+
+  def get_daily_price(self, comp: Company, end_date: Union[datetime, str], days: int = 1) -> pd.DataFrame:
+    if isinstance(end_date, datetime):
+      end_date = end_date.strftime('%Y-%m-%d')
+
+    sql = f"SELECT * FROM (SELECT * FROM daily_price WHERE code = '{comp.code}' AND date <= '{end_date}' ORDER BY date DESC LIMIT {days}) sub ORDER BY date ASC"
+    return pd.read_sql(sql, self.conn)
