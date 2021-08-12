@@ -4,7 +4,14 @@ from collections import namedtuple
 import pandas as pd
 
 
-Company = namedtuple('Company', ['code', 'name'])
+class Company:
+  def __init__(self, code, name):
+    self.code = code
+    self.name = name
+
+  def __str__(self):
+    return f'{self.name}({self.code})'
+
 
 class Market:
   def __init__(self):

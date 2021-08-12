@@ -12,6 +12,7 @@ class MarketTests(unittest.TestCase):
     self.assertEqual(self.env.get_company('005930').name, '삼성전자')
     self.assertEqual(self.env.get_company('삼성전자').code, '005930')
     self.assertEqual(self.env.get_company('삼성전자').name, '삼성전자')
+    self.assertEqual(str(self.env.get_company('005930')), '삼성전자(005930)')
 
 
 if __name__ == '__main__':
