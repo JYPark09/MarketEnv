@@ -49,10 +49,25 @@ class Market:
   def get_company_list(self):
     return [Company(code, self.codes[code]) for code in self.codes]
 
+  def _convert_date(date: Union[datetime, str]):
+    if isinstance(date, datetime):
+      return date.strftime('%Y-%m-%d')
+    return date
 
   def get_daily_price(self, comp: Company, end_date: Union[datetime, str], days: int = 1) -> pd.DataFrame:
-    if isinstance(end_date, datetime):
-      end_date = end_date.strftime('%Y-%m-%d')
+    end_date = self._convert_date(end_date)
 
     sql = f"SELECT * FROM (SELECT * FROM daily_price WHERE code = '{comp.code}' AND date <= '{end_date}' ORDER BY date DESC LIMIT {days}) sub ORDER BY date ASC"
     return pd.read_sql(sql, self.conn)
+
+  def try_buy(self, comp: Company, date: Union[datetime, str], price: int) -> bool:
+    price_df = self.get_daily_price(comp, date)
+    today_low = price_df['low'].values[0]
+
+    return today_low <= price
+
+  def try_sell(self, comp: Company, date: Union[datetime, str], price: int) -> bool:
+    price_df = self.get_daily_price(comp, date)
+    today_high = price_df['high'].values[0]
+
+    return price <= today_high
